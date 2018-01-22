@@ -21,24 +21,21 @@ namespace AntlrCSharp
                 Console.WriteLine("Input the chat.");
                 
                 // to type the EOF character and end the input: use CTRL+D, then press <enter>
-                while ((input = Console.ReadLine()) != "\u0004")
+                while ((input = Console.ReadLine()) != ";")
                 {
                     text.AppendLine(input);
                 }
                 
                 AntlrInputStream inputStream = new AntlrInputStream(text.ToString());
-                SpeakLexer speakLexer = new SpeakLexer(inputStream);
-                CommonTokenStream commonTokenStream = new CommonTokenStream(speakLexer);
-                SpeakParser speakParser = new SpeakParser(commonTokenStream);
+                var tSqlLexer = new TSqlLexer(inputStream);
+                var tSqlCTS = new CommonTokenStream(tSqlLexer);
+                var tSqlParser = new TSqlParser(tSqlCTS);
 
-                SpeakParser.ChatContext chatContext = speakParser.chat();                
-                SpeakVisitor visitor = new SpeakVisitor();                
-                visitor.Visit(chatContext);                
-
-                foreach(var line in visitor.Lines)
-                {
-                    Console.WriteLine("{0} has said {1}", line.Person, line.Text);
-                }
+                var c = tSqlParser.tsql_file();
+                var visitor = new TSqlParserVisitor();                
+                visitor.Visit(c);
+                Console.WriteLine(visitor.noSql);
+                Console.ReadLine();
             }
             catch (Exception ex)
             {                

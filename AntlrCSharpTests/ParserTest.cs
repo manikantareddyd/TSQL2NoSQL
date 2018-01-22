@@ -55,5 +55,23 @@ namespace AntlrCSharpTests
             Assert.IsNull(context.SAYS());
             Assert.AreEqual("johnsayan\"hello\"\n", context.GetText());
         }
+
+        private TSqlParser Setup2(string text)
+        {
+            AntlrInputStream inputStream = new AntlrInputStream(text);
+            var speakLexer = new TSqlLexer(inputStream);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(speakLexer);
+            var speakParser = new TSqlParser(commonTokenStream);
+
+            return speakParser;
+        }
+
+        [TestMethod]
+        public void boop()
+        {
+            TSqlParser p = Setup2("SELECT A FROM B");
+            var c = p.tsql_file();
+            c.
+        }
     }
 }
